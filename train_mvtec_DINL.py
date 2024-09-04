@@ -123,6 +123,7 @@ def train(_class_):
 
             loss_normal = loss_fucntion(inputs_normal, outputs_normal)
             loss = loss_normal*0.9 + loss_bn*0.05 + loss_last*0.05
+            print(loss)
 
             optimizer.zero_grad()
             loss.backward()
