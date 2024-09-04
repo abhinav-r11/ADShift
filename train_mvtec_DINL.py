@@ -60,7 +60,7 @@ def train(_class_):
     print(_class_)
     epochs = 20
     learning_rate = 0.005
-    batch_size = 8
+    batch_size = 4
     image_size = 256
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
