@@ -83,6 +83,7 @@ def train(_class_):
     train_data = ImageFolder(root=train_path, transform=resize_transform)
     train_data = AugMixDatasetMVTec(train_data, preprocess)
     train_dataloader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=True)
+    total_data_points = len(train_dataloader)
 
     encoder, bn = wide_resnet50_2(pretrained=True)
     encoder = encoder.to(device)
@@ -100,7 +101,7 @@ def train(_class_):
         bn.train()
         decoder.train()
         loss_list = []
-        for normal, augmix_img, gray_img in train_dataloader:
+        for i,(normal, augmix_img, gray_img) in enumerate(train_dataloader):
             normal = normal.to(device)
             inputs_normal = encoder(normal)
             bn_normal = bn(inputs_normal)
@@ -123,7 +124,7 @@ def train(_class_):
 
             loss_normal = loss_fucntion(inputs_normal, outputs_normal)
             loss = loss_normal*0.9 + loss_bn*0.05 + loss_last*0.05
-            print(loss)
+            print('Class : ',_class_,' Epoch : ',epoch,' ',i,' \ ',total_data_points, loss.data)
 
             optimizer.zero_grad()
             loss.backward()
