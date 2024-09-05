@@ -13,12 +13,12 @@ def test_visa(_class_):
     data_transform, gt_transform = get_data_transforms(128, 128)
 
     #load data
-    test_path_id = './visa/' + _class_ #update here
+    test_path_id = './visa/1cls/' + _class_ #update here
     test_path_brightness = './visa_brightness/' + _class_ #update here
     test_path_constrast = './visa_contrast/' + _class_ #update here
     test_path_defocus_blur = './visa_defocus_blur/' + _class_ #update here
     test_path_gaussian_noise = './visa_gaussian_noise/' + _class_ #update here
-    ckp_path = './checkpoints/' + 'visa_DINL_' + str(_class_) + '_19.pth'
+    ckp_path = './checkpoints/' + 'visa_DINL_' + str(_class_) + '_1.pth'
     test_data_id = VisADataset(root=test_path_id, transform=data_transform, gt_transform=gt_transform,
                              phase="test")
     test_data_brightness = VisADatasetOOD(root=test_path_brightness, transform=data_transform, gt_transform=gt_transform,
