@@ -79,7 +79,7 @@ def train(_class_):
     ])
 
 
-    train_path = './visa/1cls/' + _class_ + '/train/good/' #update here
+    train_path = './visa/1cls/' + _class_ + '/train/' #update here
     train_data = ImageFolder(root=train_path, transform=resize_transform)
     train_data = AugMixDatasetMVTec(train_data, preprocess)
     train_dataloader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=True)
