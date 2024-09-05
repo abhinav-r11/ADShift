@@ -453,6 +453,26 @@ def augpacs(image, preprocess, severity=3, width=3, depth=-1, alpha=1.):
   mixed = (1 - m) * preprocess_img + m * mix
   return mixed
 
+class AugMixDatasetVisA(torch.utils.data.Dataset):
+  """Dataset wrapper to perform AugMix augmentation."""
+
+  def __init__(self, dataset, preprocess):
+    self.dataset = dataset
+    self.preprocess = preprocess
+    self.gray_preprocess = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=mean_train,
+                             std=std_train),
+        transforms.Grayscale(3)
+    ])
+  def __getitem__(self, i):
+    x, _ = self.dataset[i]
+    return self.preprocess(x), augmvtec(x, self.preprocess), self.gray_preprocess(x)
+
+  def __len__(self):
+    return len(self.dataset)
+
+    
 class AugMixDatasetMVTec(torch.utils.data.Dataset):
   """Dataset wrapper to perform AugMix augmentation."""
 
