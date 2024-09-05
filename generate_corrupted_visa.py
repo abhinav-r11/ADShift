@@ -8,7 +8,7 @@ item_list = ['candle','capsules','cashew','chewinggum','fryum','macaroni1','maca
                     'pcb3','pcb4','pipe_fryum']
 for type_cor in ['brightness','contrast','defocus_blur','gaussian_noise']:
     for _class_ in item_list:
-        path_orginal = './visa/' + _class_ + '/' + 'test' #path to the test set of original mvtec 
+        path_orginal = './visa/1cls/' + _class_ + '/' + 'test' #path to the test set of original mvtec 
         path = './visa_'+type_cor+'/' + _class_ + '/' + 'test' #path to the corrupted mvtec 
         isExist = os.path.exists(path)
         if not isExist:
@@ -23,7 +23,7 @@ for type_cor in ['brightness','contrast','defocus_blur','gaussian_noise']:
             if not isExist:
                 os.makedirs(path_type_new)
                 print("The new directory is created!")
-            image_names = glob.glob(path_type + '/*.png')
+            image_names = glob.glob(path_type + '/*.jpg')
             for image_name in image_names:
                 path_to_image = image_name
                 print(path_to_image)
