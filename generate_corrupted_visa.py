@@ -17,7 +17,7 @@ for type_cor in ['brightness','contrast','defocus_blur','gaussian_noise']:
         type_sets = glob.glob(path_orginal+'/*/')
         for type in type_sets:
             path_type = type
-            path_type_new = path_type.replace('visa', 'visa_'+type_cor)
+            path_type_new = path_type.replace('visa/1cls', 'visa_'+type_cor)
             print(path_type_new)
             isExist = os.path.exists(path_type_new)
             if not isExist:
@@ -31,5 +31,5 @@ for type_cor in ['brightness','contrast','defocus_blur','gaussian_noise']:
                 image = np.array(image)
                 corrupted = corrupt(image, corruption_name=type_cor, severity=3)
                 im = Image.fromarray(corrupted)
-                im.save(path_to_image.replace('visa', 'visa_'+type_cor))
+                im.save(path_to_image.replace('visa/1cls', 'visa_'+type_cor))
 
