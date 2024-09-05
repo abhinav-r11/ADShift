@@ -22,8 +22,10 @@ for type_cor in ['brightness','contrast','defocus_blur','gaussian_noise']:
             isExist = os.path.exists(path_type_new)
             if not isExist:
                 os.makedirs(path_type_new)
-                print("The new directory is created!")
-            image_names = glob.glob(path_type + '/*.jpg')
+                #print("The new directory is created!")
+            image_names = [os.path.join(path_type, file) for file in os.listdir(path_type) ]##glob.glob(path_type + '/*.jpg')
+            #print(path_types)
+            
             for image_name in image_names:
                 path_to_image = image_name
                 print(path_to_image)
@@ -32,4 +34,3 @@ for type_cor in ['brightness','contrast','defocus_blur','gaussian_noise']:
                 corrupted = corrupt(image, corruption_name=type_cor, severity=3)
                 im = Image.fromarray(corrupted)
                 im.save(path_to_image.replace('visa/1cls', 'visa_'+type_cor))
-
