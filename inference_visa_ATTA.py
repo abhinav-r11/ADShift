@@ -2,12 +2,12 @@ import torch
 from dataset import get_data_transforms
 from resnet_TTA import  wide_resnet50_2
 from de_resnet import  de_wide_resnet50_2
-from dataset import MVTecDataset, MVTecDatasetOOD
+from dataset import VisADataset, VisADatasetOOD
 from test import  evaluation_ATTA
 
 
 
-def test_mvtec(_class_):
+def test_visa(_class_):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print('Class: ', _class_)
     data_transform, gt_transform = get_data_transforms(128, 128)
@@ -89,10 +89,10 @@ def test_mvtec(_class_):
 
     return
 
-item_list = ['carpet', 'bottle', 'hazelnut', 'leather', 'cable', 'capsule', 'grid', 'pill',
-             'transistor', 'metal_nut', 'screw', 'toothbrush', 'zipper', 'tile', 'wood']
+item_list = ['candle','capsules','cashew','chewinggum','fryum','macaroni1','macaroni2','pcb1','pcb2',
+                    'pcb3','pcb4','pipe_fryum']
 for i in item_list:
-    test_mvtec(i)
+    test_visa(i)
     print('===============================================')
     print('')
     print('')
