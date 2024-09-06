@@ -12,7 +12,7 @@ from matplotlib import pyplot as plt
 from os import listdir
 from torchvision import transforms
 import torch
-
+import os
 
 
 def cal_anomaly_map(fs_list, ft_list, out_size=224, amap_mode='mul'):
@@ -67,6 +67,11 @@ def evaluation_ATTA(encoder, bn, decoder, dataloader,device, type_of_test, img_s
         link_to_normal_sample = '/home/cttri/anomaly/data/mvtec/' + _class_ + '/train/good/000.png' #update the link here
         normal_image = Image.open(link_to_normal_sample).convert("RGB")
 
+    if dataset_name == 'visa':
+        link_to_normal_sample = './visa/1cls/' + _class_ + '/train/good/0000.jpg' #update the link here
+        normal_image = Image.open(link_to_normal_sample).convert("RGB")
+
+
     if dataset_name == 'PACS':
         labels_dict = {
             0: 'dog',
@@ -107,7 +112,8 @@ def evaluation_ATTA(encoder, bn, decoder, dataloader,device, type_of_test, img_s
         for sample in dataloader:
             img, label = sample[0], sample[1]
 
-            if dataset_name != 'mvtec' and dataset_name != 'mvtec_ood':
+             if dataset_name != 'mvtec' and dataset_name != 'mvtec_ood' and dataset_name != 'visa' and dataset_name != 'visa_ood':
+
                 if int(label) != _class_:
                     label = 1
                 else:
