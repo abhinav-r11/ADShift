@@ -130,14 +130,14 @@ class VisADataset(torch.utils.data.Dataset):
 
         for defect_type in defect_types:
             if defect_type == 'good':
-                img_paths = glob.glob(os.path.join(self.img_path, defect_type) + "/*.jpg")
+                img_paths = [os.path.join(self.img_path, defect_type, file) for file in os.listdir(os.path.join(self.img_path, defect_type)) ]
                 img_tot_paths.extend(img_paths)
                 gt_tot_paths.extend([0] * len(img_paths))
                 tot_labels.extend([0] * len(img_paths))
                 tot_types.extend(['good'] * len(img_paths))
             else:
-                img_paths = glob.glob(os.path.join(self.img_path, defect_type) + "/*.jpg")
-                gt_paths = glob.glob(os.path.join(self.gt_path, defect_type) + "/*.png")
+                img_paths = [os.path.join(self.img_path, defect_type, file) for file in os.listdir(os.path.join(self.img_path, defect_type)) ]
+                gt_paths = [os.path.join(self.gt_path, defect_type, file) for file in os.listdir(os.path.join(self.gt_path, defect_type)) ]
                 img_paths.sort()
                 gt_paths.sort()
                 img_tot_paths.extend(img_paths)
@@ -165,6 +165,7 @@ class VisADataset(torch.utils.data.Dataset):
         assert img.size()[1:] == gt.size()[1:], "image.size != gt.size !!!"
 
         return img, gt, label, img_type
+
 
 
 
@@ -250,14 +251,14 @@ class VisADatasetOOD(torch.utils.data.Dataset):
 
         for defect_type in defect_types:
             if defect_type == 'good':
-                img_paths = glob.glob(os.path.join(self.img_path, defect_type) + "/*.png")
+                img_paths = [os.path.join(self.img_path, defect_type, file) for file in os.listdir(os.path.join(self.img_path, defect_type))]
                 img_tot_paths.extend(img_paths)
                 gt_tot_paths.extend([0] * len(img_paths))
                 tot_labels.extend([0] * len(img_paths))
                 tot_types.extend(['good'] * len(img_paths))
             else:
-                img_paths = glob.glob(os.path.join(self.img_path, defect_type) + "/*.png")
-                gt_paths = glob.glob(os.path.join(self.gt_path, defect_type) + "/*.png")
+                img_paths = [os.path.join(self.img_path, defect_type, file) for file in os.listdir(os.path.join(self.img_path, defect_type))]
+                gt_paths = [os.path.join(self.gt_path, defect_type, file) for file in os.listdir(os.path.join(self.gt_path, defect_type))]
                 img_paths.sort()
                 gt_paths.sort()
                 img_tot_paths.extend(img_paths)
@@ -631,5 +632,4 @@ class AugMixDatasetPACS(torch.utils.data.Dataset):
   def __len__(self):
     return len(self.dataset)
   
-
 
