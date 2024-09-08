@@ -20,7 +20,6 @@ from torchvision import transforms
 import cv2
 import matplotlib.pyplot as plt
 
-# Anomaly map calculation
 def cal_anomaly_map(fs_list, ft_list, out_size=224):
     anomaly_map = np.ones([out_size, out_size])
     for i in range(len(ft_list)):
@@ -33,9 +32,15 @@ def cal_anomaly_map(fs_list, ft_list, out_size=224):
         anomaly_map *= a_map
     return anomaly_map
 
+# Min-max normalization function
+def min_max_norm(image):
+    a_min, a_max = image.min(), image.max()
+    return (image - a_min) / (a_max - a_min)
+
 # Function to convert anomaly map to a heatmap
 def anomaly_map_to_heatmap(anomaly_map):
-    heatmap = cv2.applyColorMap(np.uint8(255 * min_max_norm(anomaly_map)), cv2.COLORMAP_JET)
+    normed_map = min_max_norm(anomaly_map)
+    heatmap = cv2.applyColorMap(np.uint8(255 * normed_map), cv2.COLORMAP_JET)
     return heatmap
 
 # Function to overlay heatmap on image
@@ -89,7 +94,6 @@ def predict_anomaly(encoder, bn, decoder, image_path, device, img_size=224, lamd
     plt.show()
 
     return np.max(anomaly_map)  # Predicted anomaly score
-
 #load model
 _class_ = 'candle'
 ckp_path = './checkpoints/' + 'visa_DINL_' + str(_class_) + '_1.pth'
