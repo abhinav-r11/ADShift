@@ -20,6 +20,7 @@ from torchvision import transforms
 import cv2
 import matplotlib.pyplot as plt
 
+# Anomaly map calculation
 def cal_anomaly_map(fs_list, ft_list, out_size=224):
     anomaly_map = np.ones([out_size, out_size])
     for i in range(len(ft_list)):
@@ -38,8 +39,9 @@ def min_max_norm(image):
     return (image - a_min) / (a_max - a_min)
 
 # Function to convert anomaly map to a heatmap
-def anomaly_map_to_heatmap(anomaly_map):
+def anomaly_map_to_heatmap(anomaly_map, threshold=0.5):
     normed_map = min_max_norm(anomaly_map)
+    normed_map[normed_map < threshold] = 0  # Apply thresholding
     heatmap = cv2.applyColorMap(np.uint8(255 * normed_map), cv2.COLORMAP_JET)
     return heatmap
 
@@ -50,7 +52,7 @@ def overlay_heatmap(image, heatmap):
     return overlay
 
 # Main function for inference and visualization
-def predict_anomaly(encoder, bn, decoder, image_path, device, img_size=224, lamda=0.5):
+def predict_anomaly(encoder, bn, decoder, image_path, device, img_size=224, lamda=0.5, threshold=0.5):
     bn.eval()
     decoder.eval()
 
@@ -71,7 +73,7 @@ def predict_anomaly(encoder, bn, decoder, image_path, device, img_size=224, lamd
         inputs = encoder(img_tensor, normal_image, "test", lamda=lamda)
         outputs = decoder(bn(inputs))
         anomaly_map = cal_anomaly_map(inputs, outputs, img_size)
-        heatmap = anomaly_map_to_heatmap(anomaly_map)
+        heatmap = anomaly_map_to_heatmap(anomaly_map, threshold)
 
     # Convert tensor image to numpy array
     img_np = np.array(img)
@@ -94,6 +96,7 @@ def predict_anomaly(encoder, bn, decoder, image_path, device, img_size=224, lamd
     plt.show()
 
     return np.max(anomaly_map)  # Predicted anomaly score
+
 #load model
 _class_ = 'candle'
 ckp_path = './checkpoints/' + 'visa_DINL_' + str(_class_) + '_1.pth'
