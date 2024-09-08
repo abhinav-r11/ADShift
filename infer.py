@@ -1,3 +1,4 @@
+import os
 import torch
 import numpy as np
 from torch.nn import functional as F
@@ -50,6 +51,9 @@ def predict_anomaly(encoder, bn, decoder, image_path, device, img_size=224, lamd
 
 
 #load model
+_class_ = 'candle'
+ckp_path = './checkpoints/' + 'visa_DINL_' + str(_class_) + '_1.pth'
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 encoder, bn = wide_resnet50_2(pretrained=True)
 encoder = encoder.to(device)
 bn = bn.to(device)
@@ -67,8 +71,10 @@ bn.load_state_dict(ckp['bn'])
 
 lamda = 0.5
 
+folder_path = './visa/1cls/candle/test/bad'  # Update the path as needed
+im_paths = [os.path.join(folder_path, file) for file in os.listdir(folder_path) ]
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-image_path = "0000.jpg"  # Set your image path
+
+image_path = im_paths[0] # Set your image path
 anomaly_score = predict_anomaly(encoder, bn, decoder, image_path, device)
 print("Anomaly score:", anomaly_score)
