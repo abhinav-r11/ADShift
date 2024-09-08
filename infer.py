@@ -4,6 +4,13 @@ from torch.nn import functional as F
 from PIL import Image
 from torchvision import transforms
 
+from dataset import get_data_transforms
+from resnet_TTA import  wide_resnet50_2
+from de_resnet import  de_wide_resnet50_2
+from dataset import VisADataset, VisADatasetOOD
+from test import  evaluation_ATTA
+
+
 # Anomaly map calculation
 def cal_anomaly_map(fs_list, ft_list, out_size=224):
     anomaly_map = np.ones([out_size, out_size])
@@ -42,7 +49,26 @@ def predict_anomaly(encoder, bn, decoder, image_path, device, img_size=224, lamd
         return np.max(anomaly_map)  # Predicted anomaly score
 
 
+#load model
+encoder, bn = wide_resnet50_2(pretrained=True)
+encoder = encoder.to(device)
+bn = bn.to(device)
+encoder.eval()
+decoder = de_wide_resnet50_2(pretrained=False)
+decoder = decoder.to(device)
+
+#load checkpoint
+ckp = torch.load(ckp_path)
+for k, v in list(ckp['bn'].items()):
+    if 'memory' in k:
+        ckp['bn'].pop(k)
+decoder.load_state_dict(ckp['decoder'])
+bn.load_state_dict(ckp['bn'])
+
+lamda = 0.5
+
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-image_path = "path/to/your/image.jpg"  # Set your image path
+image_path = "0000.jpg"  # Set your image path
 anomaly_score = predict_anomaly(encoder, bn, decoder, image_path, device)
 print("Anomaly score:", anomaly_score)
