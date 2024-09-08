@@ -234,7 +234,7 @@ class VisADatasetOOD(torch.utils.data.Dataset):
             self.img_path = os.path.join(root, 'train')
         else:
             self.img_path = os.path.join(root, 'test')
-            self.gt_path = os.path.join('./visa/'+_class_,'ground_truth')
+            self.gt_path = os.path.join('./visa/1cls/'+_class_,'ground_truth')
         self.transform = transform
         self.gt_transform = gt_transform
         # load dataset
