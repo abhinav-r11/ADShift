@@ -54,6 +54,7 @@ def evaluation_ATTA(encoder, bn, decoder, dataloader,device, type_of_test, img_s
     decoder.eval()
     gt_list_sp = []
     pr_list_sp = []
+    normal_image = None
 
     if dataset_name == 'mnist':
         link_to_normal_sample = '/home/cttri/anomaly/data/MNIST/MNIST_grey/training/' + str(_class_) #update the link here
