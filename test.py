@@ -69,7 +69,9 @@ def evaluation_ATTA(encoder, bn, decoder, dataloader,device, type_of_test, img_s
         normal_image = Image.open(link_to_normal_sample).convert("RGB")
 
     if dataset_name == 'visa':
-        link_to_normal_sample = './visa/1cls/' + _class_ + '/train/good/0000.jpg' #update the link here
+	folder_path = './visa/1cls/candle/train/good'  # Update the path as needed
+	im_paths = [os.path.join(folder_path, file) for file in os.listdir(folder_path) ]
+        link_to_normal_sample = im_paths[0]#'./visa/1cls/' + _class_ + '/train/good/0000.jpg' #update the link here
         normal_image = Image.open(link_to_normal_sample).convert("RGB")
 
 
@@ -114,6 +116,7 @@ def evaluation_ATTA(encoder, bn, decoder, dataloader,device, type_of_test, img_s
             img, label = sample[0], sample[1]
 
             if dataset_name != 'mvtec' and dataset_name != 'mvtec_ood' and dataset_name != 'visa' and dataset_name != 'visa_ood':
+
                 if int(label) != _class_:
                     label = 1
                 else:
@@ -136,6 +139,5 @@ def evaluation_ATTA(encoder, bn, decoder, dataloader,device, type_of_test, img_s
             pr_list_sp.append(np.max(anomaly_map))
         auroc_sp = round(roc_auc_score(gt_list_sp, pr_list_sp), 4)
     return auroc_sp
-
 
 
