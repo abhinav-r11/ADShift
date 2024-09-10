@@ -117,12 +117,12 @@ def train(_class_):
             inputs_gray = encoder(gray_img)
             bn_gray = bn(inputs_gray)
 
-            loss_bn = loss_fucntion([bn_normal], [bn_augmix]) + loss_fucntion([bn_normal], [bn_gray])
+            loss_bn = loss_fucntion([bn_normal], [bn_augmix]) + loss_fucntion([bn_normal], [bn_gray]) #L_abs
             outputs_gray = decoder(bn_gray)
 
-            loss_last = loss_fucntion_last(outputs_normal, outputs_augmix) + loss_fucntion_last(outputs_normal, outputs_gray)
+            loss_last = loss_fucntion_last(outputs_normal, outputs_augmix) + loss_fucntion_last(outputs_normal, outputs_gray) #L_ori from RD4AD
 
-            loss_normal = loss_fucntion(inputs_normal, outputs_normal)
+            loss_normal = loss_fucntion(inputs_normal, outputs_normal) #reconstruction loss L_low_f
             loss = loss_normal*0.9 + loss_bn*0.05 + loss_last*0.05
             print('Class : ',_class_,' Epoch : ',epoch,' ',i,' \ ',total_data_points, loss.data)
 
